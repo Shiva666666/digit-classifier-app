@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Digit Classifier</title>
+</head>
+<body>
+  <h2>Upload a digit image (28x28) for prediction</h2>
+  <form id="predictForm" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" required><br><br>
+    <label>Select model:</label><br>
+    <input type="radio" name="model" value="cnn" checked> CNN<br>
+    <input type="radio" name="model" value="svm"> SVM<br><br>
+    <button type="submit">Predict</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('predictForm').onsubmit = async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const res = await fetch('https://shivadhanush.pythonanywhere.com/predict', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      document.getElementById('result').innerText = `Model: ${data.model_used}, Prediction: ${data.prediction}`;
+    };
+  </script>
+</body>
+</html>
